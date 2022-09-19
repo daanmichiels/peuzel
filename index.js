@@ -382,6 +382,9 @@ function go() {
             components[componentIndex].snappedToTable = true;
             components[componentIndex].group.setAttribute('class', '');
             componentsSnappedToTable += 1 - componentsAlreadySnappedToTable;
+
+            svg.insertBefore(components[componentIndex].group, targetRect.nextSibling);
+
         }
         componentsRemaining -= idxs.length - 1;
 
