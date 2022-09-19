@@ -97,10 +97,10 @@ function go() {
         height: selectedImage.height,
     };
     let playingAreaRect = {
-        left: -selectedImage.width * 0.5 * 1.5,
-        top: -selectedImage.height * 0.5 * 1.5,
-        width: selectedImage.width * 1.5,
-        height: selectedImage.height * 1.5,
+        left: -selectedImage.width * 0.5 * 1.2,
+        top: -selectedImage.height * 0.5 * 1.1,
+        width: selectedImage.width * 1.2,
+        height: selectedImage.height * 2.0 * 1.1,
     };
     let viewBox;
 
@@ -182,8 +182,9 @@ function go() {
                 elemDebug.setAttribute('fill', 'red');
                 pieceGroup.appendChild(elemDebug);
             }
-            let transformX = randomNumber(0, 20);
-            let transformY = randomNumber(0, 20);
+            // let transformX = randomNumber(0, 20);
+            let transformX = randomNumber(puzzleRect.left, puzzleRect.left + puzzleRect.width) - puzzleRect.left - pieceWidth * j;
+            let transformY = randomNumber(puzzleRect.top + puzzleRect.height, puzzleRect.top + 2 * puzzleRect.height) - puzzleRect.top - pieceHeight * i;
             group.setAttribute('transform', `translate(${transformX}, ${transformY})`);
             group.setAttribute('class', 'draggable');
             group.appendChild(pieceGroup);
@@ -226,8 +227,6 @@ function go() {
     let mousePosAtDragStart;
 
     function getMousePositionInSvgUnits(e) {
-        if (e.touches)
-            e = e.touches[0];
         let ctm = svg.getScreenCTM();
         return {
             x: (e.clientX - ctm.e) / ctm.a,
@@ -261,22 +260,41 @@ function go() {
         }
     }
 
-    function startDrag(e) {
+    function startDrag(evt) {
+        let e;
+        if (evt.touches)
+            e = evt.touches[0];
+        else
+            e = evt;
         let elem = e.target.parentElement.parentElement;
         if (elem.classList.contains('draggable')) {
             isDragging = true;
+            evt.preventDefault();
             mousePosAtDragStart = getMousePositionInSvgUnits(e);
             draggedComponent = parseInt(elem.id.split('_')[1]);
             transformAtDragStart = {
                 x: components[draggedComponent].transform.x,
                 y: components[draggedComponent].transform.y,
             };
-            svg.appendChild(components[draggedComponent].group);
+            let svgChildren = [];
+            svgChildren.push(...svg.children);
+            for (let i=0; i<svgChildren.length; ++i) {
+                let child = svgChildren[svgChildren.length - 1 - i];
+                if (child === components[draggedComponent].group)
+                    continue;
+                svg.insertBefore(child, svg.firstChild);
+            }
         }
     }
 
-    function drag(e) {
+    function drag(evt) {
+        let e;
+        if (evt.touches)
+            e = evt.touches[0];
+        else
+            e = evt;
         if (isDragging) {
+            evt.preventDefault();
             let mousePos = getMousePositionInSvgUnits(e);
             let dx = mousePos.x - mousePosAtDragStart.x;
             let dy = mousePos.y - mousePosAtDragStart.y;
@@ -335,7 +353,6 @@ function go() {
                 y: totalPosition.y / totalPieces,
             }
         }
-        console.log(idxs);
         let pathsToHighlight = [...components[componentIndex].group.children];
         // merge components
         for (let i=0; i<idxs.length; ++i) {
@@ -372,13 +389,10 @@ function go() {
             components[componentIndex].snappedToTable = true;
             components[componentIndex].group.setAttribute('class', '');
             componentsSnappedToTable += 1 - componentsAlreadySnappedToTable;
-            console.log(componentsAlreadySnappedToTable, 'were already snapped to table');
         }
         componentsRemaining -= idxs.length - 1;
 
-        console.log(pathsToHighlight, 'to highlight');
         for (let i=0; i<pathsToHighlight.length; ++i) {
-            console.log(pathsToHighlight[i]);
             let pathElem = pathsToHighlight[i].children[1];
             pathElem.style.transition = 'fill 0s ease';
             pathElem.style.fill = '#ffffff66';
@@ -386,14 +400,12 @@ function go() {
 
         setTimeout(() => {
             for (let i=0; i<pathsToHighlight.length; ++i) {
-                console.log(pathsToHighlight[i]);
                 let pathElem = pathsToHighlight[i].children[1];
                 pathElem.style.transition = 'fill 1s ease';
                 pathElem.style.fill = '#ffffff00';
             }
-        })
+        }, 100);
 
-        console.log(componentsRemaining, componentsSnappedToTable);
         if (componentsSnappedToTable === componentsRemaining) {
             setTimeout(() => {
                 showMenu(true);
@@ -401,10 +413,10 @@ function go() {
         }
     }
 
-    function endDrag(e) {
+    function endDrag(evt) {
         if (!isDragging)
             return;
-        drag(e);
+        evt.preventDefault();
         handleSnapping(draggedComponent);
         isDragging = false;
         draggedComponent = null;
