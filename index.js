@@ -170,7 +170,7 @@ function go() {
             let elemPath = document.createElementNS('http://www.w3.org/2000/svg','path');
             elemPath.setAttribute('d', pathToSvg(path, puzzleRect.left + pieceWidth * j, puzzleRect.top + pieceHeight * i) + 'Z');
             elemPath.setAttribute('stroke', 'black');
-            elemPath.setAttribute('fill', 'none');
+            elemPath.setAttribute('fill', '#ffffff00');
             elemPath.setAttribute('stroke-width', '1');
             pieceGroup.appendChild(piece);
             pieceGroup.appendChild(elemPath);
@@ -276,14 +276,7 @@ function go() {
                 x: components[draggedComponent].transform.x,
                 y: components[draggedComponent].transform.y,
             };
-            let svgChildren = [];
-            svgChildren.push(...svg.children);
-            for (let i=0; i<svgChildren.length; ++i) {
-                let child = svgChildren[svgChildren.length - 1 - i];
-                if (child === components[draggedComponent].group)
-                    continue;
-                svg.insertBefore(child, svg.firstChild);
-            }
+            svg.appendChild(components[draggedComponent].group);
         }
     }
 
