@@ -83,7 +83,7 @@ function go() {
 
     console.log(selectedImage);
 
-    let snapRadius = 20;
+    let snapRadius = 40;
     let nRows = 8;
     let nCols = 10;
     let componentsRemaining = nRows * nCols;

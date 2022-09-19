@@ -1,3 +1,6 @@
 artwork-birds.jpg
     https://altphotos.com/photo/colorful-wall-inspired-by-chagall-3611/
     license: CC0
+skyscraper-city-nyc-midtown.jpg
+    https://altphotos.com/photo/skyline-panorama-of-midtown-manhattan-532/
+    license: CC0
