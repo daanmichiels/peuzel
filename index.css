@@ -1,0 +1,59 @@
+body, html, * {
+    padding: 0;
+    margin: 0;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+}
+
+button {
+    color: black;
+}
+
+svg {
+    display: block;
+}
+
+#wrapper, #game {
+    width: 100%;
+    height: 100%;
+    background-color: bisque;
+}
+
+#menu-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#menu {
+    background-color: white;
+    padding: 1em;
+    font-size: 30px;
+    box-shadow: 0 0 5px 1px #00000066;
+    position: relative;
+}
+
+#menu-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2.5em;
+    height: 2.5em;
+    padding: 0.4em;
+    border: none;
+    background-color: white;
+    opacity: 0.3;
+}
+#menu-close:hover {
+     opacity: 0.7;
+     cursor: pointer;
+}
