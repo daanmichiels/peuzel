@@ -261,6 +261,7 @@ function go() {
     }
 
     function startDrag(evt) {
+        evt.preventDefault();
         let e;
         if (evt.touches)
             e = evt.touches[0];
@@ -269,7 +270,6 @@ function go() {
         let elem = e.target.parentElement.parentElement;
         if (elem.classList.contains('draggable')) {
             isDragging = true;
-            evt.preventDefault();
             mousePosAtDragStart = getMousePositionInSvgUnits(e);
             draggedComponent = parseInt(elem.id.split('_')[1]);
             transformAtDragStart = {
